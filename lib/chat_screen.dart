@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:zchatapp/ads_provider.dart';
 import 'package:zchatapp/message_model.dart';
 import 'package:zchatapp/themes.dart';
 import 'package:zchatapp/user_model.dart';
@@ -26,7 +29,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
 
     // Connect to Socket.io server
-    socket = IO.io('http://192.168.214.194:3000', <String, dynamic>{
+    socket = IO.io('http://192.168.1.13:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -84,14 +87,12 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.room),
-        // elevation: 10,
-        // surfaceTintColor: Colors.white,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+        appBar: AppBar(
+          title: Text(widget.room),
+          // elevation: 10,
+          // surfaceTintColor: Colors.white,
+        ),
+        body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           // const Divider(),
           Container(
             margin: const EdgeInsets.all(5),
@@ -112,79 +113,107 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                // return ListTile(
-                //   title: Text(messages[index]),
-                // );
-                return Column(
-                  children: [
-                    messages[index].senderId == socket.id
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                                Flexible(
-                                  child: Container(
-                                    margin: const EdgeInsets.all(5),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 5),
-                                    decoration: const BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 206, 225, 245),
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          // topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(15),
-                                        )),
-                                    child: Text(
-                                      messages[index].text,
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          color: AppColors().kblack),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    // return ListTile(
+                    //   title: Text(messages[index]),
+                    // );
+                    return Consumer<AdsProvider>(
+                      builder: (context, appservices, _) {
+                        return Column(
+                          children: [
+                            appservices.isBottomBannerAdLoaded
+                                ? Material(
+                                    color: AppColors().kblue.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: SizedBox(
+                                        height: appservices
+                                            .inlineBannerAd1?.size.height
+                                            .toDouble(),
+                                        width: appservices
+                                            .inlineBannerAd1?.size.width
+                                            .toDouble(),
+                                        child: AdWidget(
+                                            ad: appservices.inlineBannerAd1!),
+                                      ),
                                     ),
+                                  )
+                                : const SizedBox(
+                                    // height: 1,
+                                    child: Text('AD'),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 80,
-                                ),
-                              ])
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const SizedBox(
-                                width: 80,
-                              ),
-                              Flexible(
-                                child: Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 5),
-                                  decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 245, 209, 206),
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                      )),
-                                  child: Text(
-                                    messages[index].text,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: AppColors().kblack),
+                            messages[index].senderId == socket.id
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                        Flexible(
+                                          child: Container(
+                                            margin: const EdgeInsets.all(5),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 5),
+                                            decoration: const BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 206, 225, 245),
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  // topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(15),
+                                                )),
+                                            child: Text(
+                                              messages[index].text,
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: AppColors().kblack),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 80,
+                                        ),
+                                      ])
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      const SizedBox(
+                                        width: 80,
+                                      ),
+                                      Flexible(
+                                        child: Container(
+                                          margin: const EdgeInsets.all(5),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 5),
+                                          decoration: const BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 245, 209, 206),
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                              )),
+                                          child: Text(
+                                            messages[index].text,
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: AppColors().kblack),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                  ],
-                );
-              },
-            ),
-          ),
+                          ],
+                        );
+                      },
+                    );
+                  })),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             height: 70,
@@ -217,8 +246,6 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }
