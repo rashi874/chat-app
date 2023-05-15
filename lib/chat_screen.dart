@@ -94,6 +94,12 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           // const Divider(),
+          Text(
+            'This is Development mode .Full Features coming soon',
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          ),
           Container(
             margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -112,6 +118,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
+
           Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
