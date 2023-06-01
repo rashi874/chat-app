@@ -35,7 +35,7 @@ class ThemeClass {
       brightness: Brightness.dark,
       textTheme: const TextTheme(),
       fontFamily: 'PlusJakartaSans',
-      // primarySwatch: Colors.amber,
+      primarySwatch: Colors.amber,
       cardColor: AppColors().kblue,
       iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(

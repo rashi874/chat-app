@@ -8,6 +8,8 @@ import 'package:zchatapp/message_model.dart';
 import 'package:zchatapp/themes.dart';
 import 'package:zchatapp/user_model.dart';
 
+import 'ope_ads.dart';
+
 class ChatPage extends StatefulWidget {
   final String username;
   final String room;
@@ -86,125 +88,97 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.room),
-          // elevation: 10,
-          // surfaceTintColor: Colors.white,
-        ),
-        body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          // const Divider(),
-          Text(
-            'This is Development mode .Full Features coming soon',
-            style: TextStyle(
-              fontSize: 12,
-            ),
+    final prov = Provider.of<AdsProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      AdsProvider().inlineBannerAd?.dispose();
+      prov.createInlineBannerAd3(context);
+    });
+    return Consumer<AdsProvider>(builder: (context, appservices, _) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.room),
+            // elevation: 10,
+            // surfaceTintColor: Colors.white,
           ),
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: const BoxDecoration(
-                // color: Color.fromARGB(255, 241, 245, 206),
-                borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            )),
-            child: const Text(
-              'Today',
+          body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            // const Divider(),
+            const Text(
+              'This is Development mode .Full Features coming soon',
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 12,
               ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              decoration: const BoxDecoration(
+                  // color: Color.fromARGB(255, 241, 245, 206),
+                  borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              )),
+              child: const Text(
+                'Today',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
 
-          Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    // return ListTile(
-                    //   title: Text(messages[index]),
-                    // );
-                    return Consumer<AdsProvider>(
-                      builder: (context, appservices, _) {
-                        return Column(
-                          children: [
-                            appservices.isBottomBannerAdLoaded
-                                ? Material(
-                                    color: AppColors().kblue.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: SizedBox(
-                                        height: appservices
-                                            .inlineBannerAd1?.size.height
-                                            .toDouble(),
-                                        width: appservices
-                                            .inlineBannerAd1?.size.width
-                                            .toDouble(),
-                                        child: AdWidget(
-                                            ad: appservices.inlineBannerAd1!),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    // height: 1,
-                                    child: Text('AD'),
-                                  ),
-                            messages[index].senderId == socket.id
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                        Flexible(
-                                          child: Container(
-                                            margin: const EdgeInsets.all(5),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 5),
-                                            decoration: const BoxDecoration(
-                                                color: Color.fromARGB(
-                                                    255, 206, 225, 245),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(15),
-                                                  bottomRight:
-                                                      Radius.circular(15),
-                                                  // topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(15),
-                                                )),
-                                            child: Text(
-                                              messages[index].text,
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: AppColors().kblack),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 80,
-                                        ),
-                                      ])
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      const SizedBox(
-                                        width: 80,
-                                      ),
+            appservices.isinlineBannerAdAdLoaded
+                ? Material(
+                    // color: AppColors().kblue.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(5),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SizedBox(
+                        height:
+                            appservices.inlineBannerAd?.size.height.toDouble(),
+                        width:
+                            appservices.inlineBannerAd?.size.width.toDouble(),
+                        child: AdWidget(ad: appservices.inlineBannerAd!),
+                      ),
+                    ),
+                  )
+                : const SizedBox(
+                    height: 1,
+                    // child: Text(
+                    //   'AD',
+                    //   style: TextStyle(color: Colors.white),
+                    // ),
+                  ),
+
+            Expanded(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      // return ListTile(
+                      //   title: Text(messages[index]),
+                      // );
+                      return Column(
+                        children: [
+                          messages[index].senderId == socket.id
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
                                       Flexible(
                                         child: Container(
                                           margin: const EdgeInsets.all(5),
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 5),
+                                              horizontal: 12, vertical: 5),
                                           decoration: const BoxDecoration(
                                               color: Color.fromARGB(
-                                                  255, 245, 209, 206),
+                                                  255, 206, 225, 245),
                                               borderRadius: BorderRadius.only(
                                                 bottomLeft: Radius.circular(15),
                                                 bottomRight:
                                                     Radius.circular(15),
-                                                topLeft: Radius.circular(15),
+                                                // topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(15),
                                               )),
                                           child: Text(
                                             messages[index].text,
@@ -214,45 +188,76 @@ class _ChatPageState extends State<ChatPage> {
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                          ],
-                        );
-                      },
-                    );
-                  })),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 70,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      hintText: 'Type your message',
-                      focusedBorder: InputBorder.none,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 245, 209, 206),
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
+                                      const SizedBox(
+                                        width: 80,
+                                      ),
+                                    ])
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const SizedBox(
+                                      width: 80,
+                                    ),
+                                    Flexible(
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 245, 209, 206),
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                            )),
+                                        child: Text(
+                                          messages[index].text,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: AppColors().kblack),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ],
+                      );
+                    })),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 70,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        hintText: 'Type your message',
+                        focusedBorder: InputBorder.none,
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(0, 245, 209, 206),
+                            ),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                IconButton(
-                  onPressed: () {
-                    return sendMessage();
-                  },
-                  icon: const Icon(Icons.send_rounded),
-                  // child: const Text('Send'),
-                ),
-              ],
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: () {
+                      showAd();
+                      return sendMessage();
+                    },
+                    icon: const Icon(Icons.send_rounded),
+                    // child: const Text('Send'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]));
+          ]));
+    });
   }
 }
