@@ -37,7 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   socket_io_client: ^2.0.2
   provider: ^6.0.4
+  dynamic_color: ^1.4.0
   google_mobile_ads: ^3.0.0
+  device_info_plus: ^9.0.2
+  lottie: ^2.3.2
 
 dev_dependencies:
   flutter_test:

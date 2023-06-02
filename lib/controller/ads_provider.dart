@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:zchatapp/ad_helper.dart';
+import 'package:zchatapp/ads/ad_helper.dart';
 
 class AdsProvider with ChangeNotifier {
   // RewardedAd? rewardedAd;

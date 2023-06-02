@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:zchatapp/ads_provider.dart';
-import 'package:zchatapp/message_model.dart';
-import 'package:zchatapp/themes.dart';
-import 'package:zchatapp/user_model.dart';
+import 'package:zchatapp/controller/ads_provider.dart';
+import 'package:zchatapp/model/message_model.dart';
+import 'package:zchatapp/util/themes.dart';
+import 'package:zchatapp/model/user_model.dart';
 
-import 'ope_ads.dart';
+import '../../ads/ope_ads.dart';
 
 class ChatPage extends StatefulWidget {
   final String username;

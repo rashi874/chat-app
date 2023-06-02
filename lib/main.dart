@@ -1,12 +1,39 @@
+import 'dart:developer';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:zchatapp/ads_provider.dart';
-import 'package:zchatapp/chat_screen.dart';
-import 'package:zchatapp/demo.dart';
-import 'package:zchatapp/themes.dart';
+import 'package:zchatapp/controller/ads_provider.dart';
+import 'package:zchatapp/view/home/home_screen.dart';
+import 'ads/ope_ads.dart';
 
-import 'ope_ads.dart';
+Future<String?> getDeviceDetails() async {
+  String? identifier = ''; // Initialized with an empty string
+  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+  try {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+      // deviceName = androidInfo.model;
+      // deviceVersion = androidInfo.version.toString();
+      identifier = androidInfo.id; // UUID for Android
+      log(androidInfo.id);
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+      // deviceName = iosInfo.name;
+      // deviceVersion = iosInfo.systemVersion;
+      identifier = iosInfo.identifierForVendor; // UUID for iOS
+    }
+  } catch (e) {
+    print('Failed to get device details: $e');
+  }
+
+  return identifier;
+}
+
+//TP1A.221005.003
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +41,15 @@ void main() async {
   await MobileAds.instance.initialize();
 
   await loadAd();
+  await getDeviceDetails();
+
   runApp(const MyApp());
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Color.fromARGB(251, 37, 35, 35)
+        ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,30 +65,16 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Stranger Chat',
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.dark,
-        theme: ThemeClass.lightTheme,
-        darkTheme: ThemeClass.darkTheme,
-
-        // ThemeData(
-        //   // This is the theme of your application.
-        //   //
-        //   // Try running your application with "flutter run". You'll see the
-        //   // application has a blue toolbar. Then, without quitting the app, try
-        //   // changing the primarySwatch below to Colors.green and then invoke
-        //   // "hot reload" (press "r" in the console where you ran "flutter run",
-        //   // or simply save your changes to "hot reload" in a Flutter IDE).
-        //   // Notice that the counter didn't reset back to zero; the application
-        //   // is not restarted.
-        //   useMaterial3: true,
-        //   primarySwatch: Colors.indigo,
-        // ),
-        home: MyHomePage(),
-        // ChatPage(
-        //   room: 'Stranger Chat',
-        //   username: '',
-        // ),
+        theme: ThemeData(
+          appBarTheme:
+              AppBarTheme(backgroundColor: Color.fromARGB(251, 37, 35, 35)),
+          useMaterial3: true,
+          scaffoldBackgroundColor: Color.fromARGB(251, 37, 35, 35),
+          brightness: Brightness.dark,
+        ),
+        home: HomeScreen(),
       ),
     );
   }
