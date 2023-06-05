@@ -1,26 +1,41 @@
+// To parse this JSON data, do
+//
+//     final messagemodel = messagemodelFromJson(jsonString);
+
 import 'dart:convert';
 
-List<Messagemodel> messagemodelFromJson(String str) => List<Messagemodel>.from(
-    json.decode(str).map((x) => Messagemodel.fromJson(x)));
-String messagemodelToJson(List<Messagemodel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+Messagemodel messagemodelFromJson(String str) => Messagemodel.fromJson(json.decode(str));
+
+String messagemodelToJson(Messagemodel data) => json.encode(data.toJson());
 
 class Messagemodel {
-  String senderId;
-  String text;
+    String reciever;
+    String sender;
+    String messageId;
+    String text;
+    DateTime createdAt;
 
-  Messagemodel({
-    required this.senderId,
-    required this.text,
-  });
+    Messagemodel({
+        required this.reciever,
+        required this.sender,
+        required this.messageId,
+        required this.text,
+        required this.createdAt,
+    });
 
-  factory Messagemodel.fromJson(Map<String, dynamic> json) => Messagemodel(
-        senderId: json["senderId"],
+    factory Messagemodel.fromJson(Map<String, dynamic> json) => Messagemodel(
+        reciever: json["reciever"],
+        sender: json["sender"],
+        messageId: json["messageId"],
         text: json["text"],
-      );
+        createdAt: DateTime.parse(json["createdAt"]),
+    );
 
-  Map<String, dynamic> toJson() => {
-        "senderId": senderId,
+    Map<String, dynamic> toJson() => {
+        "reciever": reciever,
+        "sender": sender,
+        "messageId": messageId,
         "text": text,
-      };
+        "createdAt": createdAt.toIso8601String(),
+    };
 }

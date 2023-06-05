@@ -18,8 +18,8 @@ class AdsProvider with ChangeNotifier {
         await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
             MediaQuery.of(context).size.width.truncate());
     inlineBannerAd1 = BannerAd(
-      size: size!,
-      // size: AdSize.fluid,
+      // size: size!,
+      size: AdSize.banner,
       adUnitId: AdHelper.bannerAdUnitId,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -29,6 +29,7 @@ class AdsProvider with ChangeNotifier {
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
+          notifyListeners();
         },
       ),
     );

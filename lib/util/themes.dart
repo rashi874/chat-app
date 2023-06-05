@@ -66,6 +66,7 @@ class AppColors {
   Color kblue = const Color(0xffA5B8EF);
   Color kwhite = Colors.white;
   Color kblack = Colors.black;
+  Color kprimary = Color.fromARGB(251, 37, 35, 35);
   static final defaultLightColorScheme =
       ColorScheme.fromSwatch(primarySwatch: Colors.red);
 

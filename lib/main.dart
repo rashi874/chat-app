@@ -1,54 +1,29 @@
-import 'dart:developer';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/ads_provider.dart';
-import 'package:zchatapp/view/home/home_screen.dart';
+import 'package:zchatapp/controller/chat_provider.dart';
+import 'package:zchatapp/controller/global_provider.dart';
+import 'package:zchatapp/controller/splash_provider.dart';
+import 'package:zchatapp/controller/user_provider.dart';
+import 'package:zchatapp/util/socket_manager.dart';
+import 'package:zchatapp/view/login/login_screen.dart';
 import 'ads/ope_ads.dart';
 
-Future<String?> getDeviceDetails() async {
-  String? identifier = ''; // Initialized with an empty string
-  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-
-  try {
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-      // deviceName = androidInfo.model;
-      // deviceVersion = androidInfo.version.toString();
-      identifier = androidInfo.id; // UUID for Android
-      log(androidInfo.id);
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      // deviceName = iosInfo.name;
-      // deviceVersion = iosInfo.systemVersion;
-      identifier = iosInfo.identifierForVendor; // UUID for iOS
-    }
-  } catch (e) {
-    print('Failed to get device details: $e');
-  }
-
-  return identifier;
-}
-
 //TP1A.221005.003
+//UPP1.230113.010
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await MobileAds.instance.initialize();
-
   await loadAd();
-  await getDeviceDetails();
-
+  // await GblProviders().initialfunctions();
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Color.fromARGB(251, 37, 35, 35)
-        ),
+        systemNavigationBarColor: Color.fromARGB(255, 36, 36, 36)),
   );
 }
 
@@ -63,18 +38,38 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AdsProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => GblProviders(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SplashProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatProviders(),
+        ),
       ],
       child: MaterialApp(
         title: 'Stranger Chat',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          appBarTheme:
-              AppBarTheme(backgroundColor: Color.fromARGB(251, 37, 35, 35)),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color.fromARGB(61, 37, 35, 35),
+          ),
           useMaterial3: true,
-          scaffoldBackgroundColor: Color.fromARGB(251, 37, 35, 35),
+          fontFamily: 'PlusJakartaSans',
+          scaffoldBackgroundColor: const Color.fromARGB(251, 37, 35, 35),
           brightness: Brightness.dark,
         ),
-        home: HomeScreen(),
+        home: Builder(builder: (context) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            Provider.of<GblProviders>(context, listen: false)
+                .socketInitialize();
+          });
+          return LoginScreen();
+        }),
       ),
     );
   }

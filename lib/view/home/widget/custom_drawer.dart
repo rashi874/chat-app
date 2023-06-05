@@ -1,4 +1,9 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zchatapp/controller/ads_provider.dart';
+import 'package:zchatapp/controller/user_provider.dart';
+import 'package:zchatapp/view/const.dart';
 import 'package:zchatapp/view/home/home_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -8,85 +13,103 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      // width: 275,
-      // elevation: 30,
-      surfaceTintColor: Color.fromARGB(255, 11, 11, 11),
-      backgroundColor: Color.fromARGB(255, 14, 14, 14),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.horizontal(right: Radius.circular(30))),
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.horizontal(right: Radius.circular(40)),
-          // boxShadow: [
-          //   BoxShadow(
-          //       color: Color(0x3D000000), spreadRadius: 30, blurRadius: 20)
-          // ]
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+    return Consumer<UserProvider>(builder: (context, value, _) {
+      log(value.userdata.toString());
+      return SafeArea(
+        child: Align(
+          alignment: Alignment.topLeft,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      // Icon(
-                      //   Icons.arrow_back_ios,
-                      //   // color: Colors.white,
-                      //   size: 20,
-                      // ),
-                      // SizedBox(
-                      //   width: 56,
-                      // ),
-                      Text(
-                        'Settings',
-                        style: TextStyle(
-                            // color: Colors.white,
-                            fontSize: 18),
-                      ),
-                    ],
+              Sizes.spacerh40,
+              Sizes.spacerh20,
+              SizedBox(
+                height: 230,
+                child: Drawer(
+                  shadowColor: const Color.fromARGB(0, 0, 0, 0),
+                  // width: 275,
+                  elevation: 0,
+                  surfaceTintColor: Color.fromARGB(255, 251, 107, 107),
+                  // backgroundColor: const Color.fromARGB(255, 37, 35, 35),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            // Icon(
+                            //   Icons.arrow_back_ios,
+                            //   // color: Colors.white,
+                            //   size: 20,
+                            // ),
+                            // SizedBox(
+                            //   width: 56,
+                            // ),
+                            Text(
+                              'Settings',
+                              style: TextStyle(
+                                  // color: Colors.white,
+                                  fontSize: 19),
+                            ),
+                          ],
+                        ),
+                        Sizes.spacerh20,
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              child: Text(value.userdata?.name[0] ?? ''),
+                            ),
+                            // UserAvatar(filename: 'img3.jpeg'),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              value.userdata?.name ?? '',
+                              style: const TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
+                        Sizes.spacerh10,
+                        Row(
+                          children: [
+                            // CircleAvatar(
+                            //   child: Text('G'),
+                            // ),
+                            // UserAvatar(filename: 'img3.jpeg'),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Gender : ' + '${value.userdata?.gender}' ?? '',
+                              style: const TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
+                        Sizes.spacerh10,
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Logout',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.white),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      UserAvatar(filename: 'img3.jpeg'),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Text(
-                        'Tom Brenan',
-                        style: TextStyle(fontSize: 18),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 35,
-                  ),
-                  DrawerItem(
-                    title: 'Account',
-                    icon: Icons.key,
-                  ),
-                  DrawerItem(title: 'Chats', icon: Icons.chat_bubble),
-                  DrawerItem(title: 'Notifications', icon: Icons.notifications),
-                  DrawerItem(title: 'Data and Storage', icon: Icons.storage),
-                  DrawerItem(title: 'Help', icon: Icons.help),
-                  Divider(
-                    height: 35,
-                    // color: Colors.green,
-                  ),
-                  DrawerItem(
-                      title: 'Invite a friend', icon: Icons.people_outline),
-                ],
+                ),
               ),
-              DrawerItem(title: 'Log out', icon: Icons.logout)
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
