@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/user_provider.dart';
 import 'package:zchatapp/services/login.dart';
 import 'package:zchatapp/view/home/home_screen.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../api/base_rul.dart';
 
 class GblProviders with ChangeNotifier {
@@ -17,10 +16,10 @@ class GblProviders with ChangeNotifier {
 
   bool isLoading = false;
   String? gender;
-  late IO.Socket socket;
+  late io.Socket socket;
 
   void socketInitialize() {
-    socket = IO.io(ApiBaseUrl().baseUrl, <String, dynamic>{
+    socket = io.io(ApiBaseUrl().baseUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -41,14 +40,9 @@ class GblProviders with ChangeNotifier {
     try {
       if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-        // deviceName = androidInfo.model;
-        // deviceVersion = androidInfo.version.toString();
-
         identifier = androidInfo.id; // UUID for Android
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-        // deviceName = iosInfo.name;
-        // deviceVersion = iosInfo.systemVersion;
         identifier = iosInfo.identifierForVendor; // UUID for iOS
       }
     } catch (e) {
@@ -64,7 +58,6 @@ class GblProviders with ChangeNotifier {
     log(id.toString());
     isLoading = true;
     notifyListeners();
-    // log(id);
 
     await LoginServices().signinUser(id, gender).then(
       (value) {
@@ -86,7 +79,6 @@ class GblProviders with ChangeNotifier {
 
   Future initialfunctions() async {
     var acces = await storage.read(key: 'token');
-
     if (acces != null) {
       await UserProvider().getuser();
     } else {}

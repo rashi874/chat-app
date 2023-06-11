@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/global_provider.dart';
+import 'package:zchatapp/util/themes.dart';
 import 'package:zchatapp/view/const.dart';
 
 bool genderselect = false;
@@ -11,11 +12,15 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Consumer<GblProviders>(
         builder: (BuildContext context, value, Widget? child) {
       // value.initialfunctions();
       return Scaffold(
         floatingActionButton: ElevatedButton.icon(
+          style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(
+                  AppColors().kprimary.withOpacity(0.6))),
           onPressed: () {
             log(genderselect.toString());
             if (genderselect == true) {
@@ -23,82 +28,90 @@ class LoginScreen extends StatelessWidget {
             }
           },
           icon: const Icon(Icons.arrow_forward, color: Colors.white),
-          label: const Text(
-            'Continue',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        appBar: AppBar(
-          title: const Text(
-            'Stranger Chat',
-            // style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          label: const Padding(
+            padding: EdgeInsets.only(bottom: 3.0),
+            child: Text(
+              'Continue',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         body: Container(
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(8),
+          // margin: const EdgeInsets.only(left: 2, top: 30, right: 2),
+          // padding: const EdgeInsets.all(8),
+          // height: height / 1.1,
           width: double.infinity,
           decoration: BoxDecoration(
+              color: AppColors().knav,
               borderRadius: BorderRadius.circular(20),
               image: const DecorationImage(
                   image: AssetImage(
-                    'assets/images/i.gif',
+                    'assets/images/s.jpg',
                   ),
                   fit: BoxFit.cover)),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.only(top: 50.0, left: 10),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Stranger Chat',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(20),
+                margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color.fromARGB(187, 255, 255, 255)),
+                    color: const Color.fromARGB(22, 255, 255, 255)),
                 child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Sizes.spacerh10,
                     Text(
-                      'Chat With Strangers for Free\nand Unlimited.',
+                      'Chat With Strangers for Free and Unlimited.',
                       style: TextStyle(
                           fontSize: 23,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 48, 48, 48)),
+                          color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                     Sizes.spacerh10,
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18.0),
-                      child: Text(
-                        'Send unlimited texts to online strangers. Stranger Chat app. We as humans love to connect or meet new people',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 129, 127, 127)),
-                      ),
+                    Text(
+                      'You can send unlimited texts to strangers online. The human race loves to meet new people and connect with them',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 213, 213, 213)),
                     ),
+                    Sizes.spacerh10,
                   ],
                 ),
               ),
-              Sizes.spacerh30,
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(30),
-                //   color: Color.fromARGB(255, 255, 255, 255),
-                // ),
-                child: const Text(
-                  'Select Your Gender',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 31, 31, 31)),
-                ),
+              Column(
+                children: [
+                  Text(
+                    'Select Your Gender',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors().kwhite),
+                  ),
+                  Sizes.spacerh10,
+                  const SizedBox(height: 140, child: GenderSelector()),
+                ],
               ),
-              Sizes.spacerh20,
-              const SizedBox(height: 150, child: GenderSelector()),
               Sizes.spacerh30,
-              const Spacer()
             ],
           ),
         ),
@@ -108,15 +121,15 @@ class LoginScreen extends StatelessWidget {
 }
 
 class CustomRadio extends StatelessWidget {
-  CustomRadio(this.gender, {super.key});
-  Gender gender;
+  const CustomRadio({super.key, required this.gender});
+  final Gender gender;
 
   @override
   Widget build(BuildContext context) {
     return Card(
         color: gender.isSelected
-            ? const Color.fromARGB(255, 255, 255, 255)
-            : const Color.fromARGB(255, 52, 52, 52),
+            ? AppColors().kwhite.withOpacity(0.6)
+            : AppColors().kprimary.withOpacity(0.4),
         child: Container(
           width: 75,
           alignment: Alignment.center,
@@ -183,13 +196,17 @@ class GenderSelectorState extends State<GenderSelector> {
               borderRadius: BorderRadius.circular(12),
               onTap: () {
                 setState(() {
-                  genders.forEach((gender) => gender.isSelected = false);
+                  for (var gender in genders) {
+                    gender.isSelected = false;
+                  }
                   genders[index].isSelected = true;
                   value.gender = genders[index].name;
                   genderselect = true;
                 });
               },
-              child: CustomRadio(genders[index]),
+              child: CustomRadio(
+                gender: genders[index],
+              ),
             );
           });
     });

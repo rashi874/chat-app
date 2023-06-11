@@ -12,11 +12,12 @@ class AdsProvider with ChangeNotifier {
   BannerAd? inlineBannerAd1;
   BannerAd? inlineBannerAd;
   BannerAd? inlineBannerAd4;
+  bool bannerIsLoaded = false;
 
   void createInlineBannerAd(context) async {
-    final AnchoredAdaptiveBannerAdSize? size =
-        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-            MediaQuery.of(context).size.width.truncate());
+    // final AnchoredAdaptiveBannerAdSize? size =
+    //     await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+    //         MediaQuery.of(context).size.width.truncate());
     inlineBannerAd1 = BannerAd(
       // size: size!,
       size: AdSize.banner,
@@ -34,6 +35,7 @@ class AdsProvider with ChangeNotifier {
       ),
     );
     inlineBannerAd1?.load();
+    bannerIsLoaded = true;
     notifyListeners();
   }
 
@@ -43,7 +45,7 @@ class AdsProvider with ChangeNotifier {
     //         MediaQuery.of(context).size.width.truncate());
     inlineBannerAd = BannerAd(
       // size: size!,
-      size: AdSize.banner,
+      size: AdSize.fullBanner,
       adUnitId: AdHelper.bannerAdUnitId2,
       request: const AdRequest(),
       listener: BannerAdListener(

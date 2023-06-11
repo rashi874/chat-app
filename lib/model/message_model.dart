@@ -9,8 +9,8 @@ Messagemodel messagemodelFromJson(String str) => Messagemodel.fromJson(json.deco
 String messagemodelToJson(Messagemodel data) => json.encode(data.toJson());
 
 class Messagemodel {
-    String reciever;
-    String sender;
+    dynamic reciever;
+    dynamic sender;
     String messageId;
     String text;
     DateTime createdAt;

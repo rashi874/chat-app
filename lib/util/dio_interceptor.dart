@@ -22,7 +22,7 @@ class ApiInterceptor {
         onResponse: (response, handler) {
           return handler.next(response);
         },
-        onError: (DioError e, handler) async {
+        onError: (DioException e, handler) async {
           if (e.response != null) {
             if (e.response?.statusCode == 401 &&
                 e.response?.data['error'] == 'Access token expired') {
@@ -30,7 +30,7 @@ class ApiInterceptor {
               if (context != null) {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (ctx) => LoginScreen()),
+                    MaterialPageRoute(builder: (ctx) => const LoginScreen()),
                     (route) => false);
               }
 
@@ -102,7 +102,6 @@ class ApiInterceptor {
       }
     } catch (e) {
       log(e.toString());
-      //TODO: logout
     }
   }
 }

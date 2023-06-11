@@ -1,10 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zchatapp/controller/ads_provider.dart';
+import 'package:zchatapp/controller/splash_provider.dart';
 import 'package:zchatapp/controller/user_provider.dart';
+import 'package:zchatapp/util/themes.dart';
 import 'package:zchatapp/view/const.dart';
-import 'package:zchatapp/view/home/home_screen.dart';
+import 'package:zchatapp/view/login/login_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -19,48 +20,37 @@ class CustomDrawer extends StatelessWidget {
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Sizes.spacerh40,
-              Sizes.spacerh20,
+              const SizedBox(
+                height: 63,
+              ),
               SizedBox(
                 height: 230,
                 child: Drawer(
-                  shadowColor: const Color.fromARGB(0, 0, 0, 0),
-                  // width: 275,
                   elevation: 0,
-                  surfaceTintColor: Color.fromARGB(255, 251, 107, 107),
-                  // backgroundColor: const Color.fromARGB(255, 37, 35, 35),
+                  backgroundColor: const Color.fromARGB(255, 15, 15, 15),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
-                          children: [
-                            // Icon(
-                            //   Icons.arrow_back_ios,
-                            //   // color: Colors.white,
-                            //   size: 20,
-                            // ),
-                            // SizedBox(
-                            //   width: 56,
-                            // ),
-                            Text(
-                              'Settings',
-                              style: TextStyle(
-                                  // color: Colors.white,
-                                  fontSize: 19),
-                            ),
-                          ],
+                        const Text(
+                          'Settings',
+                          style: TextStyle(fontSize: 19),
                         ),
                         Sizes.spacerh20,
                         Row(
                           children: [
                             CircleAvatar(
-                              child: Text(value.userdata?.name[0] ?? ''),
+                              backgroundColor: Colors.brown,
+                              child: Text(
+                                value.userdata?.name[0].toUpperCase() ?? '',
+                                style: TextStyle(height: 2),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                             // UserAvatar(filename: 'img3.jpeg'),
                             const SizedBox(
@@ -68,7 +58,7 @@ class CustomDrawer extends StatelessWidget {
                             ),
                             Text(
                               value.userdata?.name ?? '',
-                              style: const TextStyle(fontSize: 18),
+                              style: const TextStyle(fontSize: 16),
                             )
                           ],
                         ),
@@ -83,22 +73,50 @@ class CustomDrawer extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              'Gender : ' + '${value.userdata?.gender}' ?? '',
-                              style: const TextStyle(fontSize: 18),
+                              'Gender: ${value.userdata?.gender ?? ' '}',
+                              style: const TextStyle(fontSize: 16),
                             )
                           ],
                         ),
-                        Sizes.spacerh10,
+                        Sizes.spacerh20,
                         Row(
                           children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Logout',
-                                style: const TextStyle(
-                                    fontSize: 17, color: Colors.white),
-                              ),
-                            )
+                            ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    side: MaterialStatePropertyAll(BorderSide(
+                                        color: AppColors()
+                                            .kwhite
+                                            .withOpacity(0.8))),
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        AppColors().kprimary)),
+                                label: Padding(
+                                  padding: const EdgeInsets.only(bottom: 3.5),
+                                  child: Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors()
+                                            .kwhite
+                                            .withOpacity(0.8)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Provider.of<SplashProvider>(context,
+                                          listen: false)
+                                      .logOut(context);
+                                  // showAd();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreen()));
+                                },
+                                icon: Icon(
+                                  Icons.lock_outline_rounded,
+                                  color: AppColors().kwhite.withOpacity(0.8),
+                                  size: 22,
+                                )),
                           ],
                         ),
                       ],

@@ -1,18 +1,18 @@
+//TP1A.221005.003
+//UPP1.230113.010
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:zchatapp/ads/ope_ads.dart';
 import 'package:zchatapp/controller/ads_provider.dart';
 import 'package:zchatapp/controller/chat_provider.dart';
 import 'package:zchatapp/controller/global_provider.dart';
 import 'package:zchatapp/controller/splash_provider.dart';
 import 'package:zchatapp/controller/user_provider.dart';
-import 'package:zchatapp/util/socket_manager.dart';
-import 'package:zchatapp/view/login/login_screen.dart';
-import 'ads/ope_ads.dart';
-
-//TP1A.221005.003
-//UPP1.230113.010
+import 'package:zchatapp/util/themes.dart';
+import 'package:zchatapp/view/SplashScreen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,47 +20,52 @@ void main() async {
   await loadAd();
   // await GblProviders().initialfunctions();
   runApp(const MyApp());
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Color.fromARGB(255, 36, 36, 36)),
-  );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: AppColors().knav,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<AdsProvider>(
           create: (context) => AdsProvider(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<GblProviders>(
           create: (context) => GblProviders(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<SplashProvider>(
           create: (context) => SplashProvider(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<ChatProviders>(
           create: (context) => ChatProviders(),
+        ),
+        Provider<RouteObserver<Route<dynamic>>>(
+          create: (context) => RouteObserver<Route<dynamic>>(),
         ),
       ],
       child: MaterialApp(
         title: 'Stranger Chat',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromARGB(61, 37, 35, 35),
+          canvasColor: AppColors().kprimary,
+          primaryColor: AppColors().kprimary,
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors().kprimary,
           ),
           useMaterial3: true,
           fontFamily: 'PlusJakartaSans',
-          scaffoldBackgroundColor: const Color.fromARGB(251, 37, 35, 35),
+          scaffoldBackgroundColor: AppColors().kprimary,
+          primarySwatch: Colors.amber,
           brightness: Brightness.dark,
         ),
         home: Builder(builder: (context) {
@@ -68,7 +73,7 @@ class MyApp extends StatelessWidget {
             Provider.of<GblProviders>(context, listen: false)
                 .socketInitialize();
           });
-          return LoginScreen();
+          return const SplashScreen();
         }),
       ),
     );

@@ -17,7 +17,7 @@ class LoginServices {
         log(response.data.toString());
         return model;
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log(e.message.toString());
       log(e.response!.data.toString());
     

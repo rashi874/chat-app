@@ -41,8 +41,10 @@ dependencies:
   google_mobile_ads: ^3.0.0
   device_info_plus: ^9.0.2
   lottie: ^2.3.2
-  dio: ^5.1.1
   flutter_secure_storage: ^8.0.0
+  animated_text_kit: ^4.2.2
+  intl: ^0.18.1
+  dio: ^5.2.0+1
 
 dev_dependencies:
   flutter_test:

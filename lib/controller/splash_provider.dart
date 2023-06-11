@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:zchatapp/controller/user_provider.dart';
 import 'package:zchatapp/view/home/home_screen.dart';
+import 'package:zchatapp/view/login/login_screen.dart';
 
 class SplashProvider extends ChangeNotifier {
   FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -17,17 +20,18 @@ class SplashProvider extends ChangeNotifier {
         signinCheck = await storage.read(key: 'token');
         log(signinCheck.toString());
         if (signinCheck != null) {
+          Provider.of<UserProvider>(context, listen: false).getuser();
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
             builder: (context) {
               return HomeScreen();
             },
           ), (route) => false);
         } else {
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          //   builder: (context) {
-          //     return LoginScreen();
-          //   },
-          // ), (route) => false);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+            builder: (context) {
+              return const LoginScreen();
+            },
+          ), (route) => false);
         }
       },
     );
@@ -41,12 +45,12 @@ class SplashProvider extends ChangeNotifier {
     await storage.delete(key: 'refreshToken');
     await storage.delete(key: 'user');
 
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   MaterialPageRoute(
-    //     builder: (context) => LoginScreen(),
-    //   ),
-    //   (Route<dynamic> route) => false,
-    // );
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
 
     notifyListeners();
     isLoading = false;

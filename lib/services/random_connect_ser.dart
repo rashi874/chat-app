@@ -10,17 +10,19 @@ class RandomuserService {
     final dios = await ApiInterceptor().getApiUser();
     try {
       final Response response = await dios.get(
-          ApiBaseUrl().baseUrl + ApiEndpoints.random,
-          cancelToken: randomcancelToken
-          // queryParameters: {'id': "6450a11ff4d27c273ffc984b"}
-          );
+        ApiBaseUrl().baseUrl + ApiEndpoints.random,
+        cancelToken: randomcancelToken
+        // queryParameters: {'id': "6450a11ff4d27c273ffc984b"}
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         log(response.data.toString());
         final Randommodel model = Randommodel.fromJson(response.data);
         // log(response.data.toString());
         return model;
       }
-    } on DioError catch (e) {}
+    } on DioException catch (e) {
+      log(e.toString());
+    }
     return null;
   }
 }

@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/ads_provider.dart';
-import 'package:zchatapp/util/socket_manager.dart';
-import 'package:zchatapp/view/chatscreen/chat_screen.dart';
+import 'package:zchatapp/util/themes.dart';
 import 'package:zchatapp/view/const.dart';
 import 'package:zchatapp/view/home/connect_screen.dart';
 import 'package:zchatapp/view/home/widget/custom_drawer.dart';
-
-import '../../ads/ope_ads.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -18,9 +13,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AdsProvider().inlineBannerAd1?.dispose();
+    // double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final prov = Provider.of<AdsProvider>(context, listen: false);
-      AdsProvider().inlineBannerAd1?.dispose();
       prov.createInlineBannerAd(context);
     });
     return Scaffold(
@@ -40,8 +37,8 @@ class HomeScreen extends StatelessWidget {
             children: [
               Icon(
                 Icons.circle,
-                size: 10,
-                color: Colors.green,
+                size: 9,
+                color: Color.fromARGB(255, 31, 201, 99),
               ),
               SizedBox(
                 width: 16,
@@ -51,351 +48,144 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Consumer<AdsProvider>(builder: (context, appservices, _) {
-        return Column(
+        return ListView(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              padding: const EdgeInsets.all(8),
-              width: double.infinity,
-              height: 250,
+              height: height / 1.2,
+              margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
                   image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/images/i.gif',
-                      ),
-                      fit: BoxFit.cover)),
+                    fit: BoxFit.fitHeight,
+                    filterQuality: FilterQuality.high,
+                    colorFilter: ColorFilter.mode(
+                        Color.fromARGB(108, 248, 248, 255), BlendMode.modulate),
+                    image: AssetImage('assets/images/j.jpg'),
+                    // image: NetworkImage(
+                    //     'https://images.unsplash.com/photo-1635268144933-4d6f7a55e0b9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80'),
+                    // image: NetworkImage(
+                    //     'https://images.unsplash.com/photo-1601588759900-6215271553cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80'),
+                  ),
+                  color: const Color.fromARGB(8, 203, 185, 86),
+                  borderRadius: BorderRadius.circular(20)),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Sizes.spacerh20,
-                  // appservices.isinlineBannerAdAdLoaded1
-                  //     ? Material(
-                  //         borderRadius: BorderRadius.circular(10),
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(5.0),
-                  //           child: SizedBox(
-                  //             height: appservices.inlineBannerAd1?.size.height
-                  //                 .toDouble(),
-                  //             width: appservices.inlineBannerAd1?.size.width
-                  //                 .toDouble(),
-                  //             child: AdWidget(ad: appservices.inlineBannerAd1!),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : const SizedBox(
-                  //         height: 1,
-                  //       ),
-                  Text(
-                    'Strangers Are Friends You Just Have Not yet Met',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 29, 29, 29),
+                  Sizes.spacerh10,
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      'Connect\nwith Strangers',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors().kwhite.withOpacity(0.8),
+                      ),
                     ),
                   ),
-                  Sizes.spacerh10,
-                  Text(
-                    'There is a saying that strangers are friends you just not yet have met. To chat with strangers on the Internet is a great way to find new friends. Maybe you have a dilemma and no one to discuss it with. A stranger, who you can chat completely honest with, can sometimes be the best person to chat with for advice.',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 31, 31, 31),
+                  Column(
+                    children: [
+                      // Sizes.spacerh10,
+                      // (appservices.isinlineBannerAdAdLoaded1 &&
+                      //         appservices.bannerIsLoaded)
+                      //     ? Center(
+                      //         child: Material(
+                      //           shape: RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(5)),
+                      //           clipBehavior: Clip.antiAlias,
+                      //           child: SizedBox(
+                      //             height: appservices.inlineBannerAd1?.size.height
+                      //                 .toDouble(),
+                      //             width: appservices.inlineBannerAd1?.size.width
+                      //                 .toDouble(),
+                      //             child: AdWidget(ad: appservices.inlineBannerAd1!),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : const SizedBox(
+                      //         height: 1,
+                      //       ),
+                      Sizes.spacerh30,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: SizedBox(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                              style: ButtonStyle(
+                                  surfaceTintColor: MaterialStatePropertyAll(
+                                      AppColors().kprimary),
+                                  side: const MaterialStatePropertyAll(
+                                      BorderSide(
+                                          color: Color.fromARGB(
+                                              248, 198, 199, 199),
+                                          width: 3)),
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      AppColors().kwhite.withOpacity(0.2))),
+                              label: const Padding(
+                                padding: EdgeInsets.only(bottom: 3.5),
+                                child: Text(
+                                  'Connect',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 241, 241, 241),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                // showAd();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ConnectScreen()));
+                              },
+                              icon: const Icon(
+                                Icons.all_inclusive,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                                size: 22,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: height / 3.5,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                        color: AppColors().kprimary.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Stranger chat app which allows you to easily start chatting with new friends',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors().kwhite.withOpacity(0.7),
+                          ),
+                        ),
+                        Sizes.spacerh10,
+                        Text(
+                          'Introducing the ultimate stranger chat app, where anonymity meets connection. With our innovative platform, you can dive into engaging conversations with fascinating people from around the world, all from the comfort of your device.',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: AppColors().kwhite.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            // Container(
-            //   margin: const EdgeInsets.all(8),
-            //   padding: const EdgeInsets.all(18),
-            //   decoration: BoxDecoration(
-            //       color: Color.fromARGB(249, 75, 84, 51),
-            //       borderRadius: BorderRadius.circular(20)),
-            //   child: const Column(
-            //     children: [
-            //       Text(
-            //         'Strangers Are Friends You Just Have Not yet Met',
-            //         style: TextStyle(
-            //           fontSize: 20,
-            //           fontWeight: FontWeight.bold,
-            //           color: Color.fromARGB(255, 233, 233, 233),
-            //         ),
-            //       ),
-            //       Sizes.spacerh10,
-            //       Text(
-            //         'There is a saying that strangers are friends you just not yet have met. To chat with strangers on the Internet is a great way to find new friends. Maybe you have a dilemma and no one to discuss it with. A stranger, who you can chat completely honest with, can sometimes be the best person to chat with for advice.',
-            //         style: TextStyle(
-            //           fontSize: 12,
-            //           fontWeight: FontWeight.w500,
-            //           color: Color.fromARGB(255, 229, 227, 227),
-            //         ),
-            //       ),
-            //       Sizes.spacerh10,
-            //     ],
-            //   ),
-            // ),
-            // Container(
-            //   margin: const EdgeInsets.all(8),
-            //   padding: const EdgeInsets.all(18),
-            //   decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(20),
-            //       image: DecorationImage(
-            //           image: NetworkImage(
-            //               'https://blog.intercomassets.com/blog/wp-content/uploads/2023/01/Live-chat-support-2.jpg.optimal.jpg'),
-            //           fit: BoxFit.cover)),
-            //   child: const Column(
-            //     children: [
-            //       Text(
-            //         'Strangers Are Friends You Just Have Not yet Met',
-            //         style: TextStyle(
-            //           fontSize: 20,
-            //           fontWeight: FontWeight.bold,
-            //           color: Color.fromARGB(255, 233, 233, 233),
-            //         ),
-            //       ),
-            //       Sizes.spacerh10,
-            //       Text(
-            //         'There is a saying that strangers are friends you just not yet have met. To chat with strangers on the Internet is a great way to find new friends. Maybe you have a dilemma and no one to discuss it with. A stranger, who you can chat completely honest with, can sometimes be the best person to chat with for advice.',
-            //         style: TextStyle(
-            //           fontSize: 12,
-            //           fontWeight: FontWeight.w500,
-            //           color: Color.fromARGB(255, 229, 227, 227),
-            //         ),
-            //       ),
-            //       Sizes.spacerh10,
-            //     ],
-            //   ),
-            // ),
-            // Spacer(),
-            Container(
-              height: 200,
-              width: double.infinity,
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          'https://mir-s3-cdn-cf.behance.net/project_modules/hd/8af13a133820975.61c6d7982927e.jpg'),
-                      fit: BoxFit.cover)),
-              child: Container(
-                child: const Text(
-                  'Connect with Strangers',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 33, 33, 33),
-                  ),
-                ),
-              ),
-            )
           ],
         );
       }),
-      floatingActionButton: ElevatedButton.icon(
-          label: Padding(
-            padding: const EdgeInsets.only(bottom: 3.5),
-            child: const Text(
-              'Connect',
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
-          onPressed: () {
-            // showAd();
-
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ConnectScreen()));
-          },
-          icon: const Icon(
-            Icons.multiple_stop_sharp,
-            color: Colors.white,
-            size: 22,
-          )),
     );
   }
-}
-
-class DrawerItem extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  const DrawerItem({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 25),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              // color: Colors.white,
-              size: 20,
-            ),
-            const SizedBox(
-              width: 40,
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                  // color: Colors.white,
-                  fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class UserAvatar extends StatelessWidget {
-  final String filename;
-  const UserAvatar({
-    super.key,
-    required this.filename,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 32,
-      // backgroundColor: const Color.fromARGB(255, 94, 91, 91),
-      child: CircleAvatar(
-        radius: 29,
-        backgroundImage: Image.asset('assets/images/$filename').image,
-      ),
-    );
-  }
-}
-
-// class Newcontact extends StatelessWidget {
-//   const Newcontact({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-//       final prov = Provider.of<AdsProvider>(context, listen: false);
-//       AdsProvider().inlineBannerAd4?.dispose();
-//       prov.createInlineBannerAd4(context);
-//     });
-//     return Consumer<AdsProvider>(builder: (context, appservices, _) {
-//       return Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Chat'),
-//         ),
-//         body: ListView(
-//           physics: const ScrollPhysics(),
-//           shrinkWrap: true,
-//           padding: const EdgeInsets.only(left: 5),
-//           children: [
-//             appservices.isinlineBannerAdAdLoaded4
-//                 ? Material(
-//                     borderRadius: BorderRadius.circular(5),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(5.0),
-//                       child: SizedBox(
-//                         height:
-//                             appservices.inlineBannerAd4?.size.height.toDouble(),
-//                         width:
-//                             appservices.inlineBannerAd4?.size.width.toDouble(),
-//                         child: AdWidget(ad: appservices.inlineBannerAd4!),
-//                       ),
-//                     ),
-//                   )
-//                 : const SizedBox(
-//                     height: 1,
-//                   ),
-//             // Lottie.asset('assets/images/141560-loader-v25.json'),
-//           ],
-//         ),
-//       );
-//     });
-//   }
-
-Column buildConversationRow(
-    String name, String message, String filename, int msgCount, context) {
-  return Column(
-    children: [
-      InkWell(
-        onTap: () {
-          showAd();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ChatPage()));
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  UserAvatar(filename: filename),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        // style: const TextStyle(color: Colors.grey),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        message,
-                        // style: const TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 25, top: 5),
-                child: Column(
-                  children: [
-                    const Text(
-                      '16:35',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    if (msgCount > 0)
-                      CircleAvatar(
-                        radius: 7,
-                        // backgroundColor:
-                        // const Color.fromARGB(255, 193, 119, 39),
-                        child: Text(
-                          msgCount.toString(),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            // color: Colors.white
-                          ),
-                        ),
-                      )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      const Divider(
-        indent: 70,
-        height: 20,
-      )
-    ],
-  );
 }
