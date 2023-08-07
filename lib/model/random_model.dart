@@ -1,14 +1,3 @@
-// To parse this JSON data, do
-//
-//     final randommodel = randommodelFromJson(jsonString);
-
-import 'dart:convert';
-
-Randommodel randommodelFromJson(String str) =>
-    Randommodel.fromJson(json.decode(str));
-
-String randommodelToJson(Randommodel data) => json.encode(data.toJson());
-
 class Randommodel {
   String id;
   String userId;

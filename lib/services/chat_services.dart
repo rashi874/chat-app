@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:zchatapp/api/api_endpoints.dart';
 import 'package:zchatapp/api/base_rul.dart';
+import 'package:zchatapp/util/dio_exceptions.dart';
 import 'package:zchatapp/util/dio_interceptor.dart';
 
 class ChatService {
@@ -25,6 +26,7 @@ class ChatService {
         return response.data;
       }
     } catch (e) {
+      AppExceptions.errorHandler(e);
       log(e.toString());
     }
 

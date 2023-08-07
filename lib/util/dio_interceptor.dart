@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:zchatapp/api/api_endpoints.dart';
 import 'package:zchatapp/api/base_rul.dart';
@@ -30,34 +30,16 @@ class ApiInterceptor {
               if (context != null) {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (ctx) => const LoginScreen()),
+                    CupertinoPageRoute(builder: (ctx) => const LoginScreen()),
                     (route) => false);
               }
 
               RequestOptions requestOptions = e.requestOptions;
               try {
                 await regenerateToken();
-                // final refreshToken = await storage.read(key: 'refreshToken');
-                // log(refreshToken.toString());
-                // final opts = Options(method: requestOptions.method);
-                // dio.options.headers["refresh"] = "Bearer $refreshToken";
-                // final Response response = await dio.get(
-                //   ApiBaseUrl().baseUrl + ApiEndpoints.refreshToken,
-                //   options: opts,
-                // );
 
-                // if (response.statusCode! == 200) {
-                //   log(response.data.toString());
-                //   final token = response.data['accessToken'];
-                //   // final refreshToken = response.data['refreshToken'];
-                //   await storage.delete(key: 'token');
-                //   // await storage.delete(key: 'refreshToken');
-                //   storage.write(key: 'token', value: token);
-                //   // storage.write(key: 'refreshToken', value: refreshToken);
-                // }
-              } catch (e) {
-                // DioException().dioError(e, context);
-              }
+                // ignore: empty_catches
+              } catch (e) {}
               try {
                 final token = await storage.read(key: 'token');
                 final opts = Options(method: requestOptions.method);
@@ -71,9 +53,8 @@ class ApiInterceptor {
                   queryParameters: requestOptions.queryParameters,
                 );
                 return handler.resolve(response);
-              } catch (e) {
-                // DioException().dioError(e, context);
-              }
+                // ignore: empty_catches
+              } catch (e) {}
             }
           } else {
             handler.next(e);
@@ -93,7 +74,6 @@ class ApiInterceptor {
     );
     var refreshToken = await storage.read(key: 'refreshToken');
     log(refreshToken.toString());
-    // dio.options.headers["Authorization"] = "Bearer " + refreshToken;
     try {
       response =
           await dio.postUri(apiUrl, data: {'refreshToken': refreshToken});

@@ -1,214 +1,181 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:zchatapp/controller/ads_provider.dart';
 import 'package:zchatapp/controller/global_provider.dart';
 import 'package:zchatapp/util/themes.dart';
 import 'package:zchatapp/view/const.dart';
+import 'package:zchatapp/view/login/widgets.dart';
 
-bool genderselect = false;
+bool genderSelect = false;
+final Shader linearGradient = const LinearGradient(
+  colors: <Color>[
+    Color.fromARGB(185, 255, 255, 255),
+    Color.fromARGB(211, 252, 251, 169),
+  ],
+).createShader(const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0));
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  AdsProvider? adsProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    adsProvider = Provider.of<AdsProvider>(context, listen: false);
+    adsProvider?.bannerAd1?.dispose();
+    adsProvider!.createInlineloginBanner(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    return Consumer<GblProviders>(
-        builder: (BuildContext context, value, Widget? child) {
-      // value.initialfunctions();
-      return Scaffold(
-        floatingActionButton: ElevatedButton.icon(
-          style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(
-                  AppColors().kprimary.withOpacity(0.6))),
-          onPressed: () {
-            log(genderselect.toString());
-            if (genderselect == true) {
-              value.signupUser(context);
-            }
-          },
-          icon: const Icon(Icons.arrow_forward, color: Colors.white),
-          label: const Padding(
-            padding: EdgeInsets.only(bottom: 3.0),
-            child: Text(
-              'Continue',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    return Consumer2<GblProviders, AdsProvider>(
+      builder: (BuildContext context, value, appservices, _) {
+        return Scaffold(
+          extendBody: true,
+          appBar: AppBar(
+            title: Text(
+              'S',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors().kwhite,
+              ),
             ),
           ),
-        ),
-        body: Container(
-          // margin: const EdgeInsets.only(left: 2, top: 30, right: 2),
-          // padding: const EdgeInsets.all(8),
-          // height: height / 1.1,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: AppColors().knav,
-              borderRadius: BorderRadius.circular(20),
-              image: const DecorationImage(
-                  image: AssetImage(
-                    'assets/images/s.jpg',
-                  ),
-                  fit: BoxFit.cover)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 50.0, left: 10),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Stranger Chat',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                    // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: const Color.fromARGB(22, 255, 255, 255)),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          body: SafeArea(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(18),
+              children: [
+                Sizes.spacerh40,
+                Sizes.spacerh10,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Sizes.spacerh10,
                     Text(
-                      'Chat With Strangers for Free and Unlimited.',
+                      'STRANGER CHATS',
                       style: TextStyle(
-                          fontSize: 23,
+                        fontSize: 18,
+                        letterSpacing: 3.2,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors().kwhite.withOpacity(0.8),
+                      ),
+                    ),
+                    Sizes.spacerh20,
+                    Text(
+                      'Build Connections & Enjoy\nUnlimited Conversations  ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 29,
+                          wordSpacing: 2,
+                          letterSpacing: -1.0,
+                          fontWeight: FontWeight.w900,
+                          foreground: Paint()..shader = linearGradient),
+                    ),
+                    Sizes.spacerh40,
+                    Sizes.spacerh30,
+                    Text(
+                      'Choose Gender',
+                      style: TextStyle(
+                          fontSize: 17,
+                          letterSpacing: -0.5,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 255, 255, 255)),
+                          color: AppColors().kwhite.withOpacity(0.7)),
                     ),
-                    Sizes.spacerh10,
-                    Text(
-                      'You can send unlimited texts to strangers online. The human race loves to meet new people and connect with them',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromARGB(255, 213, 213, 213)),
-                    ),
-                    Sizes.spacerh10,
+                    Sizes.spacerh20,
                   ],
                 ),
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Select Your Gender',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors().kwhite),
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromARGB(66, 85, 85, 85),
+                          Color.fromARGB(57, 231, 231, 231),
+                          Color.fromARGB(33, 219, 219, 219),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(35)),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 10),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Center(child: Icon(Icons.remove)),
+                      Sizes.spacerh20,
+                      GenderSelector(),
+                      Sizes.spacerh10,
+                    ],
                   ),
-                  Sizes.spacerh10,
-                  const SizedBox(height: 140, child: GenderSelector()),
-                ],
-              ),
-              Sizes.spacerh30,
-            ],
+                ),
+                Sizes.spacerh30,
+                SizedBox(
+                  height: 42,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(19),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(194, 255, 251, 0),
+                      ),
+                      elevation: const MaterialStatePropertyAll(0),
+                      surfaceTintColor: MaterialStateProperty.all(
+                        AppColors().kblue,
+                      ),
+                    ),
+                    onPressed: () {
+                      log(genderSelect.toString());
+                      if (genderSelect) {
+                        value.signupUser(context);
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 3.0),
+                      child: Text(
+                        'Continue',
+                        style: TextStyle(
+                          color: AppColors().kblack,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Sizes.spacerh20,
+                // appservices.bannerAd1 != null && appservices.isLoaded1 == true
+                //     ? Center(
+                //         child: Material(
+                //             color: AppColors().kprimary,
+                //             shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(8),
+                //             ),
+                //             clipBehavior: Clip.antiAlias,
+                //             child: SizedBox(
+                //               width: appservices.bannerAd1!.sizes[0].width
+                //                   .toDouble(),
+                //               height: appservices.bannerAd1!.sizes[0].height
+                //                   .toDouble(),
+                //               child: AdWidget(ad: appservices.bannerAd1!),
+                //             )),
+                //       )
+                //     : Sizes.spacerh20,
+              ],
+            ),
           ),
-        ),
-      );
-    });
-  }
-}
-
-class CustomRadio extends StatelessWidget {
-  const CustomRadio({super.key, required this.gender});
-  final Gender gender;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        color: gender.isSelected
-            ? AppColors().kwhite.withOpacity(0.6)
-            : AppColors().kprimary.withOpacity(0.4),
-        child: Container(
-          width: 75,
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                gender.icon,
-                color: gender.isSelected ? Colors.black : Colors.grey,
-                size: 35,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                gender.name,
-                style: TextStyle(
-                    color: gender.isSelected ? Colors.black : Colors.grey),
-              ),
-            ],
-          ),
-        ));
-  }
-}
-
-class Gender {
-  String name;
-  IconData icon;
-  bool isSelected;
-
-  Gender(this.name, this.icon, this.isSelected);
-}
-
-class GenderSelector extends StatefulWidget {
-  const GenderSelector({super.key});
-
-  @override
-  GenderSelectorState createState() => GenderSelectorState();
-}
-
-class GenderSelectorState extends State<GenderSelector> {
-  List<Gender> genders = [];
-
-  @override
-  void initState() {
-    super.initState();
-    genders.add(Gender("Male", Icons.male, false));
-    genders.add(Gender("Female", Icons.female, false));
-    genders.add(Gender("Other", Icons.transgender, false));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<GblProviders>(
-        builder: (BuildContext context, value, Widget? child) {
-      return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          itemCount: genders.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              // splashColor: Colors.pinkAccent,
-              borderRadius: BorderRadius.circular(12),
-              onTap: () {
-                setState(() {
-                  for (var gender in genders) {
-                    gender.isSelected = false;
-                  }
-                  genders[index].isSelected = true;
-                  value.gender = genders[index].name;
-                  genderselect = true;
-                });
-              },
-              child: CustomRadio(
-                gender: genders[index],
-              ),
-            );
-          });
-    });
+        );
+      },
+    );
   }
 }

@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:zchatapp/api/api_endpoints.dart';
 import 'package:zchatapp/api/base_rul.dart';
 import 'package:zchatapp/model/signin_model.dart';
+import 'package:zchatapp/util/dio_exceptions.dart';
+import 'package:zchatapp/util/dio_interceptor.dart';
 
 class LoginServices {
   Dio dio = Dio();
@@ -18,13 +20,13 @@ class LoginServices {
         return model;
       }
     } on DioException catch (e) {
+      AppExceptions.errorHandler(e);
       log(e.message.toString());
       log(e.response!.data.toString());
-    
       return null;
-      // DioException().dioError(e, context);
     }
     return null;
-    // return null;
   }
+
+
 }

@@ -19,6 +19,9 @@ abstract class Sizes {
   static const SizedBox spacerh10 = SizedBox(
     height: 10,
   );
+  static const SizedBox spacerh5 = SizedBox(
+    height: 5,
+  );
   static const SizedBox spacerw100 = SizedBox(
     width: 100,
   );
@@ -42,5 +45,8 @@ abstract class Sizes {
   );
   static const SizedBox spacerw10 = SizedBox(
     width: 10,
+  );
+  static const SizedBox spacerw5 = SizedBox(
+    width: 5,
   );
 }

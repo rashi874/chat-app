@@ -3,54 +3,49 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zchatapp/ads/ad_helper.dart';
 
 class AdsProvider with ChangeNotifier {
-  // RewardedAd? rewardedAd;
-  // BannerAd? bottomBannerAd;
-  // bool isBottomBannerAdLoaded = false;
-  bool isinlineBannerAdAdLoaded = false;
-  bool isinlineBannerAdAdLoaded1 = false;
-  bool isinlineBannerAdAdLoaded4 = false;
-  BannerAd? inlineBannerAd1;
+  RewardedAd? rewardedAd;
+  AdManagerBannerAd? bannerAd1;
+  AdManagerBannerAd? bannerAd2;
+  AdManagerBannerAd? bannerAd3;
+  AdManagerBannerAd? bannerAd4;
   BannerAd? inlineBannerAd;
-  BannerAd? inlineBannerAd4;
-  bool bannerIsLoaded = false;
+  bool isLoaded1 = false;
+  bool isLoaded2 = false;
+  bool isLoaded3 = false;
+  bool isLoaded4 = false;
+  bool isLoaded5 = false;
 
-  void createInlineBannerAd(context) async {
-    // final AnchoredAdaptiveBannerAdSize? size =
-    //     await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-    //         MediaQuery.of(context).size.width.truncate());
-    inlineBannerAd1 = BannerAd(
-      // size: size!,
-      size: AdSize.banner,
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          isinlineBannerAdAdLoaded1 = true;
+  void createInlineloginBanner(BuildContext context) async {
+    bannerAd1 = AdManagerBannerAd(
+      adUnitId: AdHelper.bannerAdUnitId1,
+      // '/6499/example/banner',
+      request: const AdManagerAdRequest(),
+      sizes: [
+        AdSize.banner,
+      ],
+      listener: AdManagerBannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          isLoaded1 = true;
           notifyListeners();
         },
-        onAdFailedToLoad: (ad, error) {
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('AdManagerBannerAd failed to load: $err');
           ad.dispose();
-          notifyListeners();
         },
       ),
-    );
-    inlineBannerAd1?.load();
-    bannerIsLoaded = true;
-    notifyListeners();
+    )..load();
   }
 
-  void createInlineBannerAd3(context) async {
-    // final AnchoredAdaptiveBannerAdSize? size =
-    //     await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-    //         MediaQuery.of(context).size.width.truncate());
+  void homescreenInlineBannerAd(context) async {
     inlineBannerAd = BannerAd(
-      // size: size!,
-      size: AdSize.fullBanner,
+      size: AdSize.largeBanner,
       adUnitId: AdHelper.bannerAdUnitId2,
+      // '/6499/example/banner',
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {
-          isinlineBannerAdAdLoaded = true;
+          isLoaded2 = true;
           notifyListeners();
         },
         onAdFailedToLoad: (ad, error) {
@@ -62,52 +57,74 @@ class AdsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createInlineBannerAd4(context) async {
-    // final AnchoredAdaptiveBannerAdSize? size =
-    //     await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-    //         MediaQuery.of(context).size.width.truncate());
-    inlineBannerAd4 = BannerAd(
-      // size: size!,
-      size: AdSize.banner,
-      adUnitId: AdHelper.bannerAdUnitId4,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          isinlineBannerAdAdLoaded4 = true;
+  void createInlineBannerAd5(BuildContext context) {
+    bannerAd3 = AdManagerBannerAd(
+      adUnitId: AdHelper.bannerAdUnitId3,
+      // '/6499/example/banner',
+      request: const AdManagerAdRequest(),
+      sizes: [
+        AdSize.mediumRectangle,
+      ],
+      listener: AdManagerBannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          isLoaded3 = true;
           notifyListeners();
         },
-        onAdFailedToLoad: (ad, error) {
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('AdManagerBannerAd failed to load: $err');
+          isLoaded3 = false;
+          notifyListeners();
           ad.dispose();
         },
       ),
-    );
-    inlineBannerAd4?.load();
-    notifyListeners();
+    )..load();
   }
 
-  // void createBottomBannerAd(context) async {
-  //   // final AnchoredAdaptiveBannerAdSize? size =
-  //   //     await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-  //   //         MediaQuery.of(context).size.width.truncate());
+  void createInlineBannerAd4(BuildContext context) {
+    bannerAd2 = AdManagerBannerAd(
+      adUnitId: AdHelper.bannerAdUnitId4,
+      // '/6499/example/banner',
+      request: const AdManagerAdRequest(),
+      sizes: [
+        AdSize.banner,
+      ],
+      listener: AdManagerBannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          isLoaded5 = true;
+          notifyListeners();
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('AdManagerBannerAd failed to load: $err');
+          isLoaded5 = false;
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
 
-  //   bottomBannerAd = BannerAd(
-  //     adUnitId: AdHelper.bannerAdUnitId,
-  //     // size: size!,
-  //     size: AdSize.banner,
-  //     request: const AdRequest(),
-  //     listener: BannerAdListener(
-  //       onAdLoaded: (_) {
-  //         isBottomBannerAdLoaded = true;
-  //         notifyListeners();
-  //       },
-  //       onAdFailedToLoad: (ad, error) {
-  //         ad.dispose();
-  //       },
-  //     ),
-  //   );
-  //   bottomBannerAd?.load();
-  //   notifyListeners();
-  // }
+  void chatscreeninlineBannerAd(context) async {
+    bannerAd4 = AdManagerBannerAd(
+      adUnitId: AdHelper.bannerAdUnitId5,
+      // '/6499/example/banner',
+      request: const AdManagerAdRequest(),
+      sizes: [
+        AdSize.banner,
+      ],
+      listener: AdManagerBannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          isLoaded4 = true;
+          notifyListeners();
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('AdManagerBannerAd failed to load: $err');
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
 
   // void loadRewardedAd() {
   //   RewardedAd.load(
@@ -121,11 +138,9 @@ class AdsProvider with ChangeNotifier {
   //             ad.dispose();
   //             rewardedAd = null;
   //             notifyListeners();
-
   //             loadRewardedAd();
   //           },
   //         );
-
   //         rewardedAd = ad;
   //         notifyListeners();
   //       },

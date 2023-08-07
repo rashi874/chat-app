@@ -1,19 +1,18 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/user_provider.dart';
 import 'package:zchatapp/services/login.dart';
 import 'package:zchatapp/view/home/home_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:zchatapp/view/home/widget/custom_drawer.dart';
 import '../api/base_rul.dart';
 
 class GblProviders with ChangeNotifier {
   FlutterSecureStorage storage = const FlutterSecureStorage();
-  // Future<String?> id = Future.value(null); // Initialize with null
-
   bool isLoading = false;
   String? gender;
   late io.Socket socket;
@@ -26,7 +25,6 @@ class GblProviders with ChangeNotifier {
     socket.onConnect((_) {
       log('Socket connected: ${socket.id}');
     });
-
     socket.onDisconnect((_) {
       log('Socket disconnected');
     });
@@ -48,7 +46,6 @@ class GblProviders with ChangeNotifier {
     } catch (e) {
       log('Failed to get device details: $e');
     }
-
     notifyListeners();
     return identifier!;
   }
@@ -58,16 +55,15 @@ class GblProviders with ChangeNotifier {
     log(id.toString());
     isLoading = true;
     notifyListeners();
-
     await LoginServices().signinUser(id, gender).then(
       (value) {
         if (value != null) {
           storage.write(key: 'token', value: value.accessToken);
           storage.write(key: 'refreshToken', value: value.refreshToken);
           Provider.of<UserProvider>(context, listen: false).getuser();
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(
             builder: (context) {
-              return HomeScreen();
+              return const HomeScreen();
             },
           ), (route) => false);
         }
@@ -76,6 +72,8 @@ class GblProviders with ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+
 
   Future initialfunctions() async {
     var acces = await storage.read(key: 'token');

@@ -1,11 +1,7 @@
-//TP1A.221005.003
-//UPP1.230113.010
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:zchatapp/ads/ope_ads.dart';
 import 'package:zchatapp/controller/ads_provider.dart';
 import 'package:zchatapp/controller/chat_provider.dart';
 import 'package:zchatapp/controller/global_provider.dart';
@@ -17,13 +13,12 @@ import 'package:zchatapp/view/SplashScreen/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MobileAds.instance.initialize();
-  await loadAd();
-  // await GblProviders().initialfunctions();
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: AppColors().knav,
-  ));
+      systemNavigationBarContrastEnforced: false,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: AppColors().kprimary,
+      statusBarIconBrightness: Brightness.light));
 }
 
 class MyApp extends StatelessWidget {
@@ -57,15 +52,19 @@ class MyApp extends StatelessWidget {
         title: 'Stranger Chat',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          canvasColor: AppColors().kprimary,
-          primaryColor: AppColors().kprimary,
+          primaryColor: AppColors().kwhite,
           appBarTheme: AppBarTheme(
-            backgroundColor: AppColors().kprimary,
-          ),
+              titleTextStyle: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'SFProDisplay',
+              ),
+              backgroundColor: AppColors().kprimary,
+              surfaceTintColor: AppColors().kprimary,
+              foregroundColor: AppColors().kwhite),
           useMaterial3: true,
-          fontFamily: 'PlusJakartaSans',
+          fontFamily: 'SFProDisplay',
           scaffoldBackgroundColor: AppColors().kprimary,
-          primarySwatch: Colors.amber,
           brightness: Brightness.dark,
         ),
         home: Builder(builder: (context) {

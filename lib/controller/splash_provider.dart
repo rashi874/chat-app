@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:zchatapp/controller/user_provider.dart';
 import 'package:zchatapp/view/home/home_screen.dart';
+import 'package:zchatapp/view/home/widget/transition.dart';
 import 'package:zchatapp/view/login/login_screen.dart';
 
 class SplashProvider extends ChangeNotifier {
@@ -14,20 +15,20 @@ class SplashProvider extends ChangeNotifier {
 
   void splashTimer(context) {
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 2),
       () async {
         onboardValue = await storage.read(key: 'onboard');
         signinCheck = await storage.read(key: 'token');
         log(signinCheck.toString());
         if (signinCheck != null) {
           Provider.of<UserProvider>(context, listen: false).getuser();
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(
             builder: (context) {
-              return HomeScreen();
+              return const HomeScreen();
             },
           ), (route) => false);
         } else {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute(
             builder: (context) {
               return const LoginScreen();
             },
@@ -46,14 +47,11 @@ class SplashProvider extends ChangeNotifier {
     await storage.delete(key: 'user');
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
+      SlideTransitionExample(
+        page: const LoginScreen(),
       ),
       (Route<dynamic> route) => false,
     );
-
-    notifyListeners();
     isLoading = false;
-    notifyListeners();
   }
 }
